@@ -13,32 +13,37 @@ public class main
 
 	    for (int i = 0; i < listOfFiles.length; i++)
 		 {
-		  
-		    String newName = renameFile(listOfFiles[i].getName());	      
-		    File newFile = new File("C:\\Users\\Rong\\Desktop\\example\\" + newName);
-		    listOfFiles[i].renameTo(newFile);
-		  
-		}
-	    
-	   
+	    	String newName = renameFile(listOfFiles[i].getName());
+		    File newFile = new File(listOfFiles[i].getParent() + "\\" + newName);
+		    listOfFiles[i].renameTo(newFile);		  
+		 }	    	   
 	}
-	public static String renameFile(String actualName)
+	public static String renameFile(String actualName )
 	{
 		String actualNewName = "";
-		String newName = actualName.replace("Exercise", "");
-		String[] newNameArray = newName.split("_");
-        for(int i = 0; i < newNameArray.length; i++)
-        {
-        	if(newNameArray[i].length()==1)
-        	{
-        		newNameArray[i] = "0" + newNameArray[i];
-        	}
-        	if(i == 0)
-    		{
-    			newNameArray[i] = newNameArray[i] + "_";
-    		}
-        	actualNewName = actualNewName + newNameArray[i];
-        }
-		return "excercise" + actualNewName;
-	}
+		if(actualName.matches("Exercise[\\d]_[\\d].*") 
+				|| actualName.matches("Exercise[\\d]{2}_[\\d].*") 
+				|| actualName.matches("Exercise[\\d]_[\\d]{2}.*"))
+		{
+			int startIndex = actualName.lastIndexOf('e') + 1;
+			int endIndex = actualName.lastIndexOf('_') + 1;
+			actualNewName = actualName;
+			if(actualName.charAt(startIndex) != '0' && actualName.charAt(startIndex + 1) == '_' )
+			{
+				StringBuilder sb = new StringBuilder(actualName);
+				sb.insert(startIndex, '0');
+				actualNewName = sb.toString();
+			}
+			if(actualName.charAt(endIndex) != '0' && actualName.charAt(endIndex - 1) == '_')
+			{
+				StringBuilder sb = new StringBuilder(actualNewName);
+				int newNameEndIndex = actualNewName.lastIndexOf('_') + 1;
+				sb.insert(newNameEndIndex, '0');
+				actualNewName = sb.toString();
+
+			}
+			return actualNewName;
+		}
+		return actualNewName;
+	}	
 }
